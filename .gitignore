@@ -1,0 +1,9 @@
+build
+CMakeLists.txt.user
+.vscode
+.clang-format
+.cache
+.clang-tidy
+.idea
+boards/arm/Nucleo_debug
+*.code-workspace
