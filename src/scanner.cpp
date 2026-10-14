@@ -5,16 +5,25 @@
 #include <zephyr/net/net_mgmt.h>
 #include <zephyr/net/wifi_mgmt.h>
 #include <zephyr/sys/printk.h>
+#include <zephyr/sys/util.h>
 
 #include <errno.h>
 
 K_SEM_DEFINE(scan_done, 0, 1);
 
-static void wifi_event_handler(struct net_mgmt_event_callback *cb, uint64_t event, struct net_if *iface)
+WifiScanner::WifiScanner()
+        : network_count(0)
+{
+    k_mutex_init(&count_mutex);
+}
+
+void WifiScanner::wifi_event_handler(struct net_mgmt_event_callback *cb, uint64_t mgmt_event, struct net_if *iface)
 {
     ARG_UNUSED(iface);
 
-    switch (event)
+    auto *scanner = CONTAINER_OF(cb, WifiScanner, wifi_cb);
+
+    switch (mgmt_event)
     {
     case NET_EVENT_WIFI_SCAN_RESULT:
     {
@@ -24,12 +33,12 @@ static void wifi_event_handler(struct net_mgmt_event_callback *cb, uint64_t even
             break;
         }
 
-        printk("SSID: %.*s | RSSI: %d dBm | Channel: %u | Security: %d\n",
-               result->ssid_length,
-               reinterpret_cast<const char *>(result->ssid),
-               result->rssi,
-               result->channel,
-               static_cast<int>(result->security));
+        k_mutex_lock(&scanner->count_mutex, K_FOREVER);
+        scanner->network_count++;
+        k_mutex_unlock(&scanner->count_mutex);
+
+        printk("SSID: %.*s | RSSI: %d dBm | Channel: %u | Security: %d\n", result->ssid_length, reinterpret_cast<const char *>(result->ssid),
+               result->rssi, result->channel, static_cast<int>(result->security));
 
         break;
     }
@@ -54,8 +63,6 @@ int WifiScanner::start()
         return -ENODEV;
     }
 
-    static struct net_mgmt_event_callback wifi_cb;
-
     net_mgmt_init_event_callback(&wifi_cb, wifi_event_handler, NET_EVENT_WIFI_SCAN_RESULT | NET_EVENT_WIFI_SCAN_DONE);
     net_mgmt_add_event_callback(&wifi_cb);
 
@@ -70,6 +77,9 @@ int WifiScanner::start()
 
     while (true)
     {
+        k_mutex_lock(&count_mutex, K_FOREVER);
+        network_count = 0;
+        k_mutex_unlock(&count_mutex);
         printk("\nScanning Wi-Fi networks...\n");
 
         ret = net_mgmt(NET_REQUEST_WIFI_SCAN, iface, nullptr, 0);
@@ -85,10 +95,23 @@ int WifiScanner::start()
             {
                 printk("WARNING: Wi-Fi scan timed out\n");
             }
+            else
+            {
+                printk("Found %d networks\n", getNetworkCount());
+            }
         }
 
         k_sleep(K_SECONDS(10));
     }
 
     return 0;
+}
+
+int WifiScanner::getNetworkCount()
+{
+    k_mutex_lock(&count_mutex, K_FOREVER);
+    int count = network_count;
+    k_mutex_unlock(&count_mutex);
+
+    return count;
 }

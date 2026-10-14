@@ -10,6 +10,7 @@ project(esp-zephyr)
 set(APP_SOURCES
     src/main.cpp
     src/scanner.cpp
+    src/oled.cpp
 )
 
 target_sources(app PRIVATE ${APP_SOURCES})
