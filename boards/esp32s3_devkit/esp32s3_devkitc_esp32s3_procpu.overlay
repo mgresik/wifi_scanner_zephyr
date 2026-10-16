@@ -25,7 +25,17 @@
 //     };
 // };
 
+/ {
+    zephyr,user {
+        io-channels = <&adc1 3>;
+    };
+};
+
 &i2c0 {
     status = "okay";
     clock-frequency = <400000>;
+};
+
+&adc1{
+    status = "okay";
 };

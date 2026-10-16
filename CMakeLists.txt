@@ -11,6 +11,7 @@ set(APP_SOURCES
     src/main.cpp
     src/scanner.cpp
     src/oled.cpp
+    src/soil_sensor.cpp
 )
 
 target_sources(app PRIVATE ${APP_SOURCES})
