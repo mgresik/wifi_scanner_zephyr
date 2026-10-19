@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ESP32-S3 Zephyr Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+
+            "servertype": "openocd",
+
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/../../soft/zephyrproject/build/zephyr/zephyr.elf",
+            "loadFiles": [],
+
+            "gdbPath": "${env:ZEPHYR_SDK_INSTALL_DIR}/gnu/xtensa-espressif_esp32s3_zephyr-elf/bin/xtensa-espressif_esp32s3_zephyr-elf-gdb",
+
+            "serverpath": "/home/max/soft/openocd-esp32/bin/openocd",
+
+            "searchDir": [
+                "/home/max/soft/openocd-esp32/share/openocd/scripts"
+            ],
+
+            "configFiles": [
+                "interface/esp_usb_jtag.cfg",
+                "target/esp32s3.cfg"
+            ],
+
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "raw",
+            "postLaunchCommands": [
+                "set breakpoint auto-hw on"
+            ],
+            "openOCDPreConfigLaunchCommands": [
+                  "set ESP_RTOS none",
+                  "set ESP_ONLYCPU 0x1"
+            ],
+
+            "openOCDLaunchCommands": [
+                "init",
+                "halt",
+                "esp appimage_offset 0x0"
+            ]
+        }
+    ]
+}

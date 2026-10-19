@@ -17,7 +17,7 @@ public:
 private:
     static constexpr int SAMPLE_COUNT = 16;
 
-    int16_t dry_raw_ = 3000;
+    int16_t dry_raw_ = 4100;
     int16_t wet_raw_ = 1500;
 
     adc_sequence sequence_{};

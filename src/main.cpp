@@ -105,41 +105,39 @@ int main()
 {
     printk("Application startingssssss\n");
 
-    // if (!device_is_ready(i2c))
-    // {
-    //     printk("ERROR: I2C device is not ready\n");
-    //     return 0;
-    // }
+    if (!device_is_ready(i2c))
+    {
+        printk("ERROR: I2C device is not ready\n");
+        return 0;
+    }
 
-    // if (!oled.init())
-    // {
-    //     printk("ERROR: OLED initialization failed\n");
-    //     return 0;
-    // }
+    if (!oled.init())
+    {
+        printk("ERROR: OLED initialization failed\n");
+        return 0;
+    }
 
-    // if (!sensor.init())
-    // {
-    //     printk("ERROR: ADC initialization failed\n");
-    //     return 0;
-    // }
+    if (!sensor.init())
+    {
+        printk("ERROR: ADC initialization failed\n");
+        return 0;
+    }
 
-    // // Wi-Fi stack.
-    // k_thread_create( &wifi_thread_data, wifi_stack, K_THREAD_STACK_SIZEOF(wifi_stack), 
-    //                 wifi_thread_entry, &scanner, nullptr, nullptr, WIFI_PRIORITY, 0, K_NO_WAIT);
+    // Wi-Fi stack.
+    k_thread_create( &wifi_thread_data, wifi_stack, K_THREAD_STACK_SIZEOF(wifi_stack), 
+                    wifi_thread_entry, &scanner, nullptr, nullptr, WIFI_PRIORITY, 0, K_NO_WAIT);
 
-    // // OLED stack.
-    // k_thread_create(&oled_thread_data, oled_stack, K_THREAD_STACK_SIZEOF(oled_stack),
-    //                 oled_thread_entry, &oled, &scanner, &sensor, OLED_PRIORITY, 0, K_NO_WAIT);
+    // OLED stack.
+    k_thread_create(&oled_thread_data, oled_stack, K_THREAD_STACK_SIZEOF(oled_stack),
+                    oled_thread_entry, &oled, &scanner, &sensor, OLED_PRIORITY, 0, K_NO_WAIT);
 
-    // // Soil sensor stack
-    // k_thread_create(&soil_thread_data, soil_stack, K_THREAD_STACK_SIZEOF(oled_stack),
-    //                 soil_thread_entry, &sensor, nullptr, nullptr, OLED_PRIORITY, 0, K_NO_WAIT);
+    // Soil sensor stack
+    k_thread_create(&soil_thread_data, soil_stack, K_THREAD_STACK_SIZEOF(oled_stack),
+                    soil_thread_entry, &sensor, nullptr, nullptr, OLED_PRIORITY, 0, K_NO_WAIT);
 
     while (true)
     {
-        printk("Before message\n");
         printk("All threads created\n");
-        printk("After message\n");
         k_sleep(K_SECONDS(10));
     }
     

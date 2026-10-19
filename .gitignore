@@ -1,6 +1,6 @@
 build
 CMakeLists.txt.user
-.vscode
+# .vscode
 .clang-format
 .cache
 .clang-tidy

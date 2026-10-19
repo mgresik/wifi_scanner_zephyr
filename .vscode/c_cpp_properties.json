@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Zephyr",
+            "compileCommands": "/home/max/soft/zephyrproject/build/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "/home/max/soft/zephyrproject/zephyr",
+                    "/home/max/soft/zephyrproject/modules"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            }
+        }
+    ],
+    "version": 4
+}

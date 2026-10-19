@@ -61,9 +61,9 @@ int SoilMoistureSensor::readRaw(int16_t& raw)
         sum += sample_buffer_[0];
         k_sleep(K_MSEC(2));
     }
-
+    
     raw = static_cast<int16_t>(sum / SAMPLE_COUNT);
-
+    
     return 0;
 }
 
