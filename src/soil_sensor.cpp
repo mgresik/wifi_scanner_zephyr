@@ -23,18 +23,18 @@ int SoilMoistureSensor::init()
         return ret;
     }
 
-    sequence_ = {};
+    sequence = {};
 
-    const int seq_ret = adc_sequence_init_dt(&ADC_SPEC, &sequence_);
+    const int seq_ret = adc_sequence_init_dt(&ADC_SPEC, &sequence);
     if (seq_ret < 0) 
     {
         return seq_ret;
     }
 
-    sequence_.buffer = sample_buffer_;
-    sequence_.buffer_size = sizeof(sample_buffer_);
-    sequence_.resolution = 12;
-    sequence_.oversampling = 0;
+    sequence.buffer = sample_buffer;
+    sequence.buffer_size = sizeof(sample_buffer);
+    sequence.resolution = 12;
+    sequence.oversampling = 0;
 
     return 0;
 }
@@ -45,20 +45,20 @@ int SoilMoistureSensor::readRaw(int16_t& raw)
 
     for (int i = 0; i < SAMPLE_COUNT; ++i) 
     {    
-        sample_buffer_[0] = 0;
+        sample_buffer[0] = 0;
 
-        sequence_.buffer = sample_buffer_;
-        sequence_.buffer_size = sizeof(sample_buffer_);
-        sequence_.resolution = 12;
-        sequence_.channels = BIT(ADC_SPEC.channel_id);
+        sequence.buffer = sample_buffer;
+        sequence.buffer_size = sizeof(sample_buffer);
+        sequence.resolution = 12;
+        sequence.channels = BIT(ADC_SPEC.channel_id);
         
-        const int ret = adc_read(ADC_SPEC.dev, &sequence_);
+        const int ret = adc_read(ADC_SPEC.dev, &sequence);
         if (ret < 0) 
         {
             return ret;
         }
 
-        sum += sample_buffer_[0];
+        sum += sample_buffer[0];
         k_sleep(K_MSEC(2));
     }
     
@@ -72,14 +72,14 @@ int SoilMoistureSensor::readHumidityPercent(int& percent)
     int16_t raw = 0;
 
     const int ret = readRaw(raw);
-
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         return ret;
     }
 
     const int32_t range = static_cast<int32_t>(wet_raw_) - dry_raw_;
-
-    if (range == 0) {
+    if (range == 0) 
+    {
         return -EINVAL;
     }
 

@@ -1,26 +1,6 @@
 #include "oled.h"
 #include <cstring>
 
-// ----- Команды SSD1306 (из даташита) -----
-#define SSD1306_SET_MEM_MODE        0x20
-#define SSD1306_SET_COL_ADDR        0x21
-#define SSD1306_SET_PAGE_ADDR       0x22
-#define SSD1306_SET_DISP_START_LINE 0x40
-#define SSD1306_SET_CONTRAST        0x81
-#define SSD1306_SET_CHARGE_PUMP     0x8D
-#define SSD1306_SET_SEG_REMAP       0xA0
-#define SSD1306_SET_ENTIRE_ON       0xA4
-#define SSD1306_SET_NORM_DISP       0xA6
-#define SSD1306_SET_MUX_RATIO       0xA8
-#define SSD1306_SET_DISP_OFF        0xAE
-#define SSD1306_SET_DISP_ON         0xAF
-#define SSD1306_SET_COM_OUT_DIR     0xC0
-#define SSD1306_SET_DISP_OFFSET     0xD3
-#define SSD1306_SET_DISP_CLK_DIV    0xD5
-#define SSD1306_SET_PRECHARGE       0xD9
-#define SSD1306_SET_COM_PIN_CFG     0xDA
-#define SSD1306_SET_VCOM_DET        0xDB
-
 SSD1306::SSD1306(const struct device *i2c, uint8_t addr)
                                 :  i2c_(i2c), addr_(addr) 
 {
@@ -163,7 +143,8 @@ void SSD1306::drawPixel(int16_t x, int16_t y, bool color)
 
 // ----- Шрифт 5x7 (символы ASCII 32..127) -----
 // Каждый символ – 5 байт (по 5 столбцов), биты строки 0..6 (7 строк)
-static const uint8_t font5x7[][5] = {
+static const uint8_t font5x7[][5] = 
+{
     {0x00, 0x00, 0x00, 0x00, 0x00}, // 32 space
     {0x00, 0x00, 0x5F, 0x00, 0x00}, // 33 !
     {0x00, 0x07, 0x00, 0x07, 0x00}, // 34 "

@@ -98,7 +98,6 @@ static void soil_thread_entry(void *p1, void *p2, void *p3)
 
         k_sleep(K_SECONDS(2));
     }
-
 }
 
 int main()
@@ -123,15 +122,12 @@ int main()
         return 0;
     }
 
-    // Wi-Fi stack.
     k_thread_create( &wifi_thread_data, wifi_stack, K_THREAD_STACK_SIZEOF(wifi_stack), 
                     wifi_thread_entry, &scanner, nullptr, nullptr, WIFI_PRIORITY, 0, K_NO_WAIT);
 
-    // OLED stack.
     k_thread_create(&oled_thread_data, oled_stack, K_THREAD_STACK_SIZEOF(oled_stack),
                     oled_thread_entry, &oled, &scanner, &sensor, OLED_PRIORITY, 0, K_NO_WAIT);
 
-    // Soil sensor stack
     k_thread_create(&soil_thread_data, soil_stack, K_THREAD_STACK_SIZEOF(oled_stack),
                     soil_thread_entry, &sensor, nullptr, nullptr, OLED_PRIORITY, 0, K_NO_WAIT);
 
@@ -141,6 +137,5 @@ int main()
         k_sleep(K_SECONDS(10));
     }
     
-
     return 0;
 }
