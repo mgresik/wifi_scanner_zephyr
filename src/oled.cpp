@@ -4,7 +4,7 @@
 SSD1306::SSD1306(const struct device *i2c, uint8_t addr)
                                 :  i2c_(i2c), addr_(addr) 
 {
-    memset(buffer_, 0, sizeof(buffer_));
+    memset(buffer, 0, sizeof(buffer));
 }
 
 int SSD1306::writeCmd(uint8_t cmd)
@@ -93,7 +93,7 @@ bool SSD1306::init()
 
 void SSD1306::clear()
 {
-    memset(buffer_, 0, sizeof(buffer_));
+    memset(buffer, 0, sizeof(buffer));
 }
 
 bool SSD1306::update()
@@ -128,7 +128,7 @@ bool SSD1306::update()
         return false;
     }
 
-    return writeData(buffer_, sizeof(buffer_)) == 0;
+    return writeData(buffer, sizeof(buffer)) == 0;
 }
 
 // ----- Draw pixel -----
@@ -137,8 +137,13 @@ void SSD1306::drawPixel(int16_t x, int16_t y, bool color)
     if (x < 0 || x >= OLED_WIDTH || y < 0 || y >= OLED_HEIGHT) return;
     uint16_t idx = x + (y / 8) * OLED_WIDTH;
     uint8_t bit = 1 << (y % 8);
-    if (color) buffer_[idx] |= bit;
-    else       buffer_[idx] &= ~bit;
+    if (color) 
+    {
+        buffer[idx] |= bit;
+    }
+    else{       
+        buffer[idx] &= ~bit;
+    }
 }
 
 // ----- Шрифт 5x7 (символы ASCII 32..127) -----

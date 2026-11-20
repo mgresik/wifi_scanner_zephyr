@@ -44,7 +44,7 @@ public:
 private:
     const struct device *i2c_;
     uint8_t addr_;
-    uint8_t buffer_[OLED_BUFFER_SIZE];
+    uint8_t buffer[OLED_BUFFER_SIZE];
 
     int writeCmd(uint8_t cmd);
     int writeData(const uint8_t *data, size_t len);

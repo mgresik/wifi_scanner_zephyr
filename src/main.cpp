@@ -1,6 +1,7 @@
 #include "scanner.h"
 #include "oled.h"
 #include "soil_sensor.h"
+#include "led_status.h"
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
@@ -25,6 +26,7 @@ static const struct device *i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 static SSD1306 oled(i2c, OLED_I2C_ADDR);
 static WifiScanner scanner;
 static SoilMoistureSensor sensor;
+static RgbLed ledStatus;
 
 static void wifi_thread_entry(void *p1, void *p2, void *p3)
 {
@@ -94,6 +96,8 @@ static void soil_thread_entry(void *p1, void *p2, void *p3)
             continue;
         }
 
+        ledStatus.updateMoisture(humidity_ret);
+
         printk("ADC raw: %d | Soil moisture: %d%%\n", raw, humidity);
 
         k_sleep(K_SECONDS(2));
@@ -102,7 +106,7 @@ static void soil_thread_entry(void *p1, void *p2, void *p3)
 
 int main()
 {
-    printk("Application startingssssss\n");
+    printk("Application startings\n");
 
     if (!device_is_ready(i2c))
     {
