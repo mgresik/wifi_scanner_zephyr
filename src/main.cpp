@@ -1,5 +1,5 @@
-#include "scanner.h"
-#include "oled.h"
+#include "wifi_scanner.h"
+#include "display.h"
 #include "soil_sensor.h"
 #include "led_status.h"
 #include <zephyr/kernel.h>

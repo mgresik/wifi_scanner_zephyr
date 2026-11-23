@@ -1,9 +1,13 @@
 #pragma once
 
-#include <cstdint>
-#include <zephyr/kernel.h>
+#include "libs_app.h"
 #include <zephyr/net/net_if.h>
 #include <zephyr/net/net_mgmt.h>
+#include <zephyr/net/wifi_mgmt.h>
+#include <zephyr/sys/printk.h>
+#include <zephyr/sys/util.h>
+
+#include <errno.h>
 
 class WifiScanner
 {

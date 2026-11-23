@@ -1,11 +1,10 @@
 #include "soil_sensor.h"
 
-#include <zephyr/devicetree.h>
-#include <zephyr/kernel.h>
 #include <zephyr/sys/util.h>
 
 #include <cerrno>
-#include <cstdint>
+
+LOG_MODULE_REGISTER(soil_sensor, LOG_LEVEL_INF);
 
 static const struct adc_dt_spec ADC_SPEC = ADC_DT_SPEC_GET_BY_IDX(DT_PATH(zephyr_user), 0);
 
@@ -13,7 +12,9 @@ SoilMoistureSensor::SoilMoistureSensor(){}
 
 int SoilMoistureSensor::init()
 {
-    if (!adc_is_ready_dt(&ADC_SPEC)) {
+    if (!adc_is_ready_dt(&ADC_SPEC)) 
+    {
+        LOG_ERR("ADC device not find");
         return -ENODEV;
     }
 
@@ -55,6 +56,7 @@ int SoilMoistureSensor::readRaw(int16_t& raw)
         const int ret = adc_read(ADC_SPEC.dev, &sequence);
         if (ret < 0) 
         {
+            LOG_ERR("ADC value not valid");
             return ret;
         }
 

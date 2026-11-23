@@ -1,6 +1,6 @@
 #pragma once
 
-#include <zephyr/kernel.h>
+#include "libs_app.h"
 #include <zephyr/drivers/led_strip.h>
 
 class RgbLed

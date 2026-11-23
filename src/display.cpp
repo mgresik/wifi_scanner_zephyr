@@ -1,5 +1,4 @@
-#include "oled.h"
-#include <cstring>
+#include "display.h"
 
 SSD1306::SSD1306(const struct device *i2c, uint8_t addr)
                                 :  i2c_(i2c), addr_(addr) 

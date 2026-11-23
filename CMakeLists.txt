@@ -9,8 +9,8 @@ project(esp-zephyr)
 
 set(APP_SOURCES
     src/main.cpp
-    src/scanner.cpp
-    src/oled.cpp
+    src/wifi_scanner.cpp
+    src/display.cpp
     src/soil_sensor.cpp
     src/led_status.cpp
 )

@@ -1,5 +1,4 @@
-#include <cstdint>
-#include <zephyr/device.h>
+#include "libs_app.h"
 #include <zephyr/drivers/display.h>
 #include <zephyr/drivers/i2c.h>
 

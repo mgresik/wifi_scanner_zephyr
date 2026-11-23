@@ -1,7 +1,6 @@
 #pragma once
 
-#include <cstdint>
-
+#include "libs_app.h"
 #include <zephyr/drivers/adc.h>
 
 #define SAMPLE_COUNT    16
@@ -21,5 +20,4 @@ private:
     int16_t sample_buffer[1]{};
     int16_t dry_raw_ = 4100;
     int16_t wet_raw_ = 1500;
-
 };
