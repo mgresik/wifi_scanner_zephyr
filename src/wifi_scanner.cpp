@@ -30,14 +30,14 @@ void WifiScanner::wifi_event_handler(struct net_mgmt_event_callback *cb, uint64_
         scanner->network_count++;
         k_mutex_unlock(&scanner->count_mutex);
 
-        LOG_INF("SSID: %.*s | RSSI: %d dBm | Channel: %u | Security: %d\n", result->ssid_length, reinterpret_cast<const char *>(result->ssid),
+        LOG_INF("SSID: %.*s | RSSI: %d dBm | Channel: %u | Security: %d", result->ssid_length, reinterpret_cast<const char *>(result->ssid),
                result->rssi, result->channel, static_cast<int>(result->security));
 
         break;
     }
 
     case NET_EVENT_WIFI_SCAN_DONE:
-        LOG_INF("Wi-Fi scan completed\n");
+        LOG_INF("Wi-Fi scan completed");
         k_sem_give(&scan_done);
         break;
 
@@ -52,7 +52,7 @@ int WifiScanner::start()
 
     if (iface == nullptr)
     {
-        LOG_ERR("ERROR: No network interface found\n");
+        LOG_ERR("ERROR: No network interface found");
         return -ENODEV;
     }
 
@@ -63,23 +63,23 @@ int WifiScanner::start()
     int ret = net_if_up(iface);
     if (ret != 0 && ret != -EALREADY)
     {
-        LOG_ERR("ERROR: net_if_up failed: %d\n", ret);
+        LOG_ERR("ERROR: net_if_up failed: %d", ret);
         return ret;
     }
 
-    printk("ESP32-S3 Wi-Fi scanner started\n");
+    LOG_INF("ESP32-S3 Wi-Fi scanner started");
 
     while (true)
     {
         k_mutex_lock(&count_mutex, K_FOREVER);
         network_count = 0;
         k_mutex_unlock(&count_mutex);
-        printk("\nScanning Wi-Fi networks...\n");
+        LOG_INF("Scanning Wi-Fi networks...");
 
         ret = net_mgmt(NET_REQUEST_WIFI_SCAN, iface, nullptr, 0);
         if (ret != 0)
         {
-            LOG_ERR("ERROR: Wi-Fi scan request failed: %d\n", ret);
+            LOG_ERR("ERROR: Wi-Fi scan request failed: %d", ret);
         }
         else
         {
@@ -87,11 +87,11 @@ int WifiScanner::start()
 
             if (ret != 0)
             {
-                LOG_INF("WARNING: Wi-Fi scan timed out\n");
+                LOG_INF("WARNING: Wi-Fi scan timed out");
             }
             else
             {
-                LOG_INF("Found %d networks\n", getNetworkCount());
+                LOG_INF("Found %d networks", getNetworkCount());
             }
         }
 

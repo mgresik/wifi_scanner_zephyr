@@ -26,6 +26,11 @@
             ],
 
             "runToEntryPoint": "main",
+            "hardwareBreakpoints": {
+                "require": true,
+                "limit": 2
+            },
+
             "showDevDebugOutput": "raw",
             "postLaunchCommands": [
                 "set breakpoint auto-hw on"
@@ -38,7 +43,7 @@
             "openOCDLaunchCommands": [
                 "init",
                 "halt",
-                "esp appimage_offset 0x0"
+                "esp appimage_offset 0x00020000"
             ]
         }
     ]
