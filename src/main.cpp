@@ -5,6 +5,7 @@
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/drivers/uart.h>
+#include <zephyr/drivers/gpio.h>
 
 #define WIFI_STACK_SIZE 4096
 #define OLED_STACK_SIZE 2048
@@ -24,6 +25,7 @@ static struct k_thread soil_thread_data;
 
 static const struct device *i2c = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 static const struct device *uart = DEVICE_DT_GET(DT_NODELABEL(uart0));
+static const struct gpio_dt_spec mosfet1 = GPIO_DT_SPEC_GET(DT_ALIAS(mosfet1), gpios);
 
 static SSD1306 oled(i2c, OLED_I2C_ADDR);
 static WifiScanner scanner;
@@ -39,6 +41,7 @@ void process_command(uint8_t cmd1, uint8_t cmd2)
     if (cmd1 == 0x01 && cmd2 == 0x02)
     {
         LOG_INF("CMD SSSS");
+        gpio_pin_toggle_dt(&mosfet1);
     }
     else if (cmd1 == 0x03 && cmd2 == 0x04)
     {
@@ -148,6 +151,12 @@ int main()
         LOG_ERR("ERROR: UART device is not ready\n");
         return 0;
     }
+
+    if (!gpio_is_ready_dt(&mosfet1)) {
+        LOG_ERR("GPIO controller is not ready\n");
+        return 0;
+    }
+    gpio_pin_configure_dt(&mosfet1, GPIO_OUTPUT_INACTIVE);
 
     if (!oled.init())
     {

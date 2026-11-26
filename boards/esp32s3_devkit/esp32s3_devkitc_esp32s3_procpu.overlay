@@ -32,6 +32,16 @@
     };
     aliases{
         led-strip = &led_strip;
+        mosfet1 = &mosfet1;
+    };
+
+    gpio_keys {
+        compatible = "gpio-keys";
+
+        mosfet1: mosfet_1{
+            label = "Mosfet_1";
+            gpios = <&gpio0 4 GPIO_ACTIVE_HIGH>;
+        };
     };
 };
 
@@ -74,3 +84,4 @@
 &dma {
     status = "okay";
 };
+
